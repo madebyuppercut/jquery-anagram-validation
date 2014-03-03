@@ -1,0 +1,62 @@
+<script type="text/javascript">
+	// Server-side error message example. These are key/value pairs, where:
+	// Key: form element name
+	// Value: array of error messages pertaining to that field
+	var mockErrors = {
+		"email-submit-fail": ["this email address is already taken"],
+		"free-text-submit-fail":["gibberish is not allowed", "trailing space is not allowed"]
+	}
+</script>
+<form id="fixture-form" data-validate="true" action="#" method="post">
+	<!-- basic text field test -->
+	<input name="model[text-req-max-length]" type="text" required data-match="text" data-maxlength="10">
+	<input name="model[text-not-req]" type="text" data-match="text">
+
+	<!-- email field test -->
+	<input name="model[email-req-max-length]" type="email" data-match="email" required data-maxlength="10">
+	<input name="model[email-req-default-match-type]" type="email" required>
+	<input name="model[email-not-req-with-value]" type="email" value="abc@fakedomain.com">
+
+	<!-- fail validation with filled value -->
+	<input name="model[email-fail-match]" type="email" required value="abc123">
+	<input name="model[text-fail-maxlength]" type="text" required value="123456" data-maxlength="5">
+	<input name="model[text-fail-minlength]" type="text" required value="1234" data-minlength="5" data-minlength-message="Your text is not long enough">
+
+	<!-- fail validation with unselected required checkbox -->
+	<input name="model[checkbox-req]" type="checkbox" required value="yes">
+
+	<!-- pass validation with unselected not required checkbox -->
+	<input name="model[checkbox-not-req]" type="checkbox" value="yes">
+
+	<!-- fail validation with unselected required radio -->
+	<input name="model[radio-req]" type="radio" required value="1">
+	<input name="model[radio-req]" type="radio" required value="2">
+
+	<!-- fail validation with custom error messages -->
+	<input name="model[email-fail-match-cust-msg]" type="email" required value="abc123" data-match-message="Your email is invalid">
+	<input name="model[text-fail-length]" type="text" required value="123456" data-maxlength="5" data-maxlength-message="Your text is too long">
+
+	<!-- fail password matching -->
+	<input name="model[password-fail-repeat]" type="password" required value="abc123" data-repeat="model[password-fail-repeat-confirm]" data-repeat-message="Your passwords do not match">
+	<input name="model[password-fail-repeat-confirm]" type="password" required value="abc1234" data-required-message="You must confirm your password">
+
+	<!-- fail validation with text area -->
+	<textarea name="model[textarea-free]" required data-required-message="Type something please"></textarea>
+
+	<!-- fail validation with custom regex -->
+	<input name="model[text-req-custom-regex]" type="text" required data-match="custom-text" value="lorem ipsum">
+
+	<!-- fail validation with required number value -->
+	<input name="model[number-req]" type="text" required data-match="custom-text" value="0" data-numeric value="0">
+
+	<!-- success fields -->
+	<input name="model[email-success]" type="email" required value="aabbcc@fakedomain.com">
+	<input name="model[text-success]" type="text" required value="hello world!">
+
+	<!-- place holder text for server side error message -->
+	<input name="model[email-submit-fail]" type="email" required value="abc123@fakedomain.com">
+	<input name="model[free-text-submit-fail]" type="text" required value="asdf ">
+
+	<button type="submit">
+
+</form>
