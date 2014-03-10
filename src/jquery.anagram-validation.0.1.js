@@ -45,15 +45,15 @@
 			ERROR_FIELD_CLASS = 'error-field-class',
 			INACTIVE_CLASS = 'inactive-class',
 
-			VALIDATE_BEFORE_EVENT = 'validate.before',						// Triggered before a validation (with the field as parameter)
-			VALIDATE_COMPLETE_EVENT = 'validate.complete',				// Triggered when a validation is complete (with the field as parameter)
-			VALIDATE_ALL_BEFORE_EVENT = 'validate.all.before'			// Triggered before all validations starts
-			VALIDATE_ALL_COMPLETE_EVENT = 'validate.all.complete'	// Triggered when all validations complete
+			VALIDATE_BEFORE_EVENT = 'validate.before',							// Triggered before a validation (with the field as parameter)
+			VALIDATE_COMPLETE_EVENT = 'validate.complete',					// Triggered when a validation is complete (with the field as parameter)
+			VALIDATE_ALL_BEFORE_EVENT = 'validate.all.before',			// Triggered before all validations starts
+			VALIDATE_ALL_COMPLETE_EVENT = 'validate.all.complete',	// Triggered when all validations complete
 			ERRORS_LOAD_COMPLETE_EVENT = 'errors.load.complete',	// Triggered when server-side errors are loaded
 
-			VALIDATE_ALL_EVENT = 'validate.all',									// To trigger validation all fields
-			VALIDATE_FIELD_EVENT = 'validate.field',							// To trigger validation individual fields
-			ERRORS_LOAD_EVENT = 'errors.load';										// To trigger errors to load
+			VALIDATE_ALL_EVENT = 'validate.all',										// To trigger validation all fields
+			VALIDATE_FIELD_EVENT = 'validate.field',								// To trigger validation individual fields
+			ERRORS_LOAD_EVENT = 'errors.load';											// To trigger errors to load
 
 
 		/************************************************************************************
@@ -237,6 +237,7 @@
 				} else {
 					$field.removeClass(_settings[ERROR_FIELD_CLASS]);
 				}
+				_resolveSubmitActiveState();
 
 				$context.trigger(VALIDATE_COMPLETE_EVENT, [$field, validity]);
 			}
@@ -322,7 +323,7 @@
 			$context.on('change', _validateAllHandler);
 			$context.on(VALIDATE_ALL_EVENT, _validateAllHandler);
 
-			if (typeof _settings.errors != "undefined") {
+			if (typeof _settings.errors !== "undefined") {
 				$context.trigger(ERRORS_LOAD_EVENT, [_settings.errors]);
 			}
 
