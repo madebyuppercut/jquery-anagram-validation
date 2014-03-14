@@ -1,5 +1,5 @@
 /**
- * Anagram Validation jQuery Plugin v0.1
+ * Anagram Validation jQuery Plugin
  *
  * The purpose of this plugin is enable client-side validation (it's up to the application to determine its CSS) as weel as server-side error message rendering.
  * For usage, please refer to the Jasmine test suite and fixture.
