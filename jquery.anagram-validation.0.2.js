@@ -1,5 +1,5 @@
 /**
- * Anagram Validation jQuery Plugin v0.1
+ * Anagram Validation jQuery Plugin v0.2
  *
  * The purpose of this plugin is enable client-side validation (it's up to the application to determine its CSS) as weel as server-side error message rendering.
  * For usage, please refer to the Jasmine test suite and fixture.
@@ -146,7 +146,7 @@
 			 * Renders submit button(s) to inactive if there are errors present
 			 */
 			function _resolveSubmitActiveState() {
-				if ($('.' + _settings[ERROR_FIELD_CLASS], $context).length > 0 ) {
+				if ($('[data-valid="false"]', $context).length > 0 ) {
 					$('[type="submit"]', $context).addClass(_settings[INACTIVE_CLASS]);
 				} else {
 					$('[type="submit"]', $context).removeClass(_settings[INACTIVE_CLASS]);
@@ -161,7 +161,7 @@
 			 * Event handler for validating a field
 			 * @param {event} event The jQuery event object triggered.
 			 */
-			function _validateFieldHandler(event) {
+			function _validateFieldHandler(event, silence) {
 				var
 					$field = $(event.target),
 					val = null,
@@ -232,10 +232,13 @@
 
 				$('[data-field="' + $field.attr('name') + '"]').detach();
 				if (messages.length > 0) {
-					$field.addClass(_settings[ERROR_FIELD_CLASS]);
-					if (!$field.is('[data-silent]')) { _renderMessages($field, messages); }
+					if (!(silence || silence.silence)) {
+						$field.addClass(_settings[ERROR_FIELD_CLASS]);
+						if (!$field.is('[data-silent]')) { _renderMessages($field, messages); }
+					}
+					$field.attr('data-valid', 'false');
 				} else {
-					$field.removeClass(_settings[ERROR_FIELD_CLASS]);
+					$field.removeClass(_settings[ERROR_FIELD_CLASS]).attr('data-valid', 'true');
 				}
 				_resolveSubmitActiveState();
 
@@ -246,11 +249,11 @@
 			 * Event handler for validation complete. This sets a form submit as active/inactive
 			 * @param {event} event The jQuery event object.
 			 */
-			function _validateAllHandler(event) {
+			function _validateAllHandler(event, silence) {
 				$context.trigger(VALIDATE_ALL_BEFORE_EVENT);
 
 				$(_formElementSelector, $context).each(function() {
-					$(this).trigger(VALIDATE_FIELD_EVENT);
+					$(this).trigger(VALIDATE_FIELD_EVENT, [silence]);
 				});
 
 				_resolveSubmitActiveState();
@@ -268,7 +271,7 @@
 				} else {
 					$context.trigger(VALIDATE_ALL_EVENT);
 
-					if ($('.' + _settings[ERROR_FIELD_CLASS], event.target).length === 0) {
+					if ($('[data-valid="true"]', event.target).length === 0) {
 						return true;
 					} else {
 						event.preventDefault();
@@ -288,7 +291,7 @@
 
 					if ($field.length > 0) {
 						_renderMessages($field, errors[key]);
-						$field.addClass(_settings[ERROR_FIELD_CLASS]);
+						$field.addClass(_settings[ERROR_FIELD_CLASS]).attr({'data-valid': 'false'});
 					}
 				}
 
@@ -316,12 +319,15 @@
 			$context.on(ERRORS_LOAD_EVENT, _loadErrorsHandler);
 
 			// Delegate validate events on form selectors. This allows individual field validation
-			$context.on('change keyup', _formElementSelector, _validateFieldHandler);
+			$context.on('change keyup input', _formElementSelector, _validateFieldHandler);
 			$context.on(VALIDATE_FIELD_EVENT, _formElementSelector, _validateFieldHandler);
 
 			// Changing one field would trigger entire form validation for active/inactive toggle
 			$context.on('change', _validateAllHandler);
 			$context.on(VALIDATE_ALL_EVENT, _validateAllHandler);
+
+			// Prep the initial validity of all fields, but not showing messages.
+			$context.trigger(VALIDATE_ALL_EVENT, [{'silence': true}]);
 
 			if (typeof _settings.errors !== "undefined") {
 				$context.trigger(ERRORS_LOAD_EVENT, [_settings.errors]);
