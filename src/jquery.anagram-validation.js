@@ -1,5 +1,5 @@
 /**
- * Anagram Validation jQuery Plugin
+ * Anagram Validation jQuery Plugin v0.2
  *
  * The purpose of this plugin is enable client-side validation (it's up to the application to determine its CSS) as weel as server-side error message rendering.
  * For usage, please refer to the Jasmine test suite and fixture.
@@ -161,7 +161,7 @@
 			 * Event handler for validating a field
 			 * @param {event} event The jQuery event object triggered.
 			 */
-			function _validateFieldHandler(event, silence) {
+			function _validateFieldHandler(event, flags) {
 				var
 					$field = $(event.target),
 					val = null,
@@ -169,7 +169,8 @@
 					messages = [],
 					required = null,
 					length = null,
-					repeat = null;
+					repeat = null
+					flags = flags || {'silence': false};
 
 				$context.trigger(VALIDATE_BEFORE_EVENT, [$field]);
 
@@ -232,7 +233,7 @@
 
 				$('[data-field="' + $field.attr('name') + '"]').detach();
 				if (messages.length > 0) {
-					if (!(silence || silence.silence)) {
+					if (!(flags.silence)) {
 						$field.addClass(_settings[ERROR_FIELD_CLASS]);
 						if (!$field.is('[data-silent]')) { _renderMessages($field, messages); }
 					}
@@ -249,11 +250,11 @@
 			 * Event handler for validation complete. This sets a form submit as active/inactive
 			 * @param {event} event The jQuery event object.
 			 */
-			function _validateAllHandler(event, silence) {
+			function _validateAllHandler(event, flags) {
 				$context.trigger(VALIDATE_ALL_BEFORE_EVENT);
 
 				$(_formElementSelector, $context).each(function() {
-					$(this).trigger(VALIDATE_FIELD_EVENT, [silence]);
+					$(this).trigger(VALIDATE_FIELD_EVENT, [flags]);
 				});
 
 				_resolveSubmitActiveState();
