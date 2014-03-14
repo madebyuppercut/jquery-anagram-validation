@@ -9,45 +9,45 @@
 </script>
 <form id="fixture-form" data-validate="true" action="#" method="post">
 	<!-- basic text field test -->
-	<input name="model[text-req-max-length]" type="text" required data-match="text" data-maxlength="10">
-	<input name="model[text-not-req]" type="text" data-match="text">
+	<input name="model[text-req-max-length]" type="text" required data-match="text" data-maxlength="10"> <!-- Invalid -->
+	<input name="model[text-not-req]" type="text" data-match="text"> <!-- Valid -->
 
 	<!-- email field test -->
-	<input name="model[email-req-max-length]" type="email" data-match="email" required data-maxlength="10">
-	<input name="model[email-req-default-match-type]" type="email" required>
-	<input name="model[email-not-req-with-value]" type="email" value="abc@fakedomain.com">
+	<input name="model[email-req-max-length]" type="email" data-match="email" required data-maxlength="10"> <!-- Invalid -->
+	<input name="model[email-req-default-match-type]" type="email" required> <!-- Invalid -->
+	<input name="model[email-not-req-with-value]" type="email" value="abc@fakedomain.com"> <!-- Valid -->
 
 	<!-- fail validation with filled value -->
-	<input name="model[email-fail-match]" type="email" required value="abc123">
-	<input name="model[text-fail-maxlength]" type="text" required value="123456" data-maxlength="5">
-	<input name="model[text-fail-minlength]" type="text" required value="1234" data-minlength="5" data-minlength-message="Your text is not long enough">
+	<input name="model[email-fail-match]" type="email" required value="abc123"> <!-- Invalid -->
+	<input name="model[text-fail-maxlength]" type="text" required value="123456" data-maxlength="5"> <!-- Invalid -->
+	<input name="model[text-fail-minlength]" type="text" required value="1234" data-minlength="5" data-minlength-message="Your text is not long enough"> <!-- Invalid -->
 
 	<!-- fail validation with unselected required checkbox -->
-	<input name="model[checkbox-req]" type="checkbox" required value="yes">
+	<input name="model[checkbox-req]" type="checkbox" required value="yes"> <!-- Invalid -->
 
 	<!-- pass validation with unselected not required checkbox -->
-	<input name="model[checkbox-not-req]" type="checkbox" value="yes">
+	<input name="model[checkbox-not-req]" type="checkbox" value="yes"> <!-- Valid -->
 
 	<!-- fail validation with unselected required radio -->
-	<input name="model[radio-req]" type="radio" required value="1">
-	<input name="model[radio-req]" type="radio" required value="2">
+	<input name="model[radio-req]" type="radio" required value="1"> <!-- Invalid -->
+	<input name="model[radio-req]" type="radio" required value="2"> <!-- Invalid -->
 
 	<!-- fail validation with custom error messages -->
-	<input name="model[email-fail-match-cust-msg]" type="email" required value="abc123" data-match-message="Your email is invalid">
-	<input name="model[text-fail-length]" type="text" required value="123456" data-maxlength="5" data-maxlength-message="Your text is too long">
+	<input name="model[email-fail-match-cust-msg]" type="email" required value="abc123" data-match-message="Your email is invalid"> <!-- Invalid -->
+	<input name="model[text-fail-length]" type="text" required value="123456" data-maxlength="5" data-maxlength-message="Your text is too long"> <!-- Invalid -->
 
 	<!-- fail password matching -->
-	<input name="model[password-fail-repeat]" type="password" required value="abc123" data-repeat="model[password-fail-repeat-confirm]" data-repeat-message="Your passwords do not match">
-	<input name="model[password-fail-repeat-confirm]" type="password" required value="abc1234" data-required-message="You must confirm your password">
+	<input name="model[password-fail-repeat]" type="password" required value="abc123">
+	<input name="model[password-fail-repeat-confirm]" type="password" required value="abc1234" data-required-message="You must confirm your password" data-repeat="model[password-fail-repeat]" data-repeat-message="Your passwords do not match"> <!-- Invalid -->
 
 	<!-- fail validation with text area -->
-	<textarea name="model[textarea-free]" required data-required-message="Type something please"></textarea>
+	<textarea name="model[textarea-free]" required data-required-message="Type something please"></textarea> <!-- Invalid -->
 
 	<!-- fail validation with custom regex -->
-	<input name="model[text-req-custom-regex]" type="text" required data-match="custom-text" value="lorem ipsum">
+	<input name="model[text-req-custom-regex]" type="text" required data-match="custom-text" value="lorem ipsum"> <!-- Invalid -->
 
 	<!-- fail validation with required number value -->
-	<input name="model[number-req]" type="text" required data-match="custom-text" value="0" data-numeric value="0">
+	<input name="model[number-req]" type="text" required data-match="custom-text" value="0" data-numeric value="0"> <!-- Invalid -->
 
 	<!-- success fields -->
 	<input name="model[email-success]" type="email" required value="aabbcc@fakedomain.com">

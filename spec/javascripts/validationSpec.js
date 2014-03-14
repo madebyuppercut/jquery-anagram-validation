@@ -23,7 +23,7 @@ describe("A form", function() {
 		$fixtureForm.submit();
 
 		// Should have 14 offending fields total
-		expect($('.error-message', $fixtureForm).length).toBe(14);
+		expect($('[data-valid="false"]', $fixtureForm).length).toBe(15);
 		expect($('button[type="submit"]', $fixtureForm).hasClass('inactive')).toBe(true);
 	});
 
@@ -31,7 +31,8 @@ describe("A form", function() {
 		valObj = $fixtureForm.anagramValidation(testOptions).data('anagram-validation-object');
 		valObj.loadErrors(mockErrors);
 
-		// Should have 2 offending fields total
+		// Should have 2 offending fields total with message
+		expect($('[data-valid="false"]', $fixtureForm).length).toBe(17);
 		expect($('.error-message', $fixtureForm).length).toBe(2);
 		expect($('button[type="submit"]', $fixtureForm).hasClass('inactive')).toBe(true);
 	});
@@ -40,7 +41,8 @@ describe("A form", function() {
 		var optionsWithErrors = $.extend({}, testOptions, { 'errors': mockErrors });
 		$fixtureForm.anagramValidation(optionsWithErrors);
 
-		// Should have 2 offending fields total
+		// Should have 2 offending fields total with message
+		expect($('[data-valid="false"]', $fixtureForm).length).toBe(17);
 		expect($('.error-message', $fixtureForm).length).toBe(2);
 		expect($('button[type="submit"]', $fixtureForm).hasClass('inactive')).toBe(true);
 	});
@@ -54,7 +56,8 @@ describe("A form", function() {
 		$fixtureForm.on('errors.load.complete', errorsLoadCompleteHandler);
 		$fixtureForm.anagramValidation(optionsWithErrors);
 
-		// Should have 2 offending fields total
+		// Should have 2 offending fields total with message
+		expect($('[data-valid="false"]', $fixtureForm).length).toBe(17);
 		expect($('.error-message', $fixtureForm).length).toBe(2);
 		expect($('button[type="submit"]', $fixtureForm).hasClass('inactive')).toBe(true);
 		expect($fixtureForm.is('.triggered')).toBe(true);
