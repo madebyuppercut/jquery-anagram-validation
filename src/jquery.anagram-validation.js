@@ -272,7 +272,7 @@
 				} else {
 					$context.trigger(VALIDATE_ALL_EVENT);
 
-					if ($('[data-valid="true"]', event.target).length === 0) {
+					if ($('[data-valid="false"]', event.target).length === 0) {
 						return true;
 					} else {
 						event.preventDefault();
