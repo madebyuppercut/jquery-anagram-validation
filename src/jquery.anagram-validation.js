@@ -320,7 +320,7 @@
 			$context.on(ERRORS_LOAD_EVENT, _loadErrorsHandler);
 
 			// Delegate validate events on form selectors. This allows individual field validation
-			$context.on('change keyup input', _formElementSelector, _validateFieldHandler);
+			$context.on('change keyup input blur', _formElementSelector, _validateFieldHandler);
 			$context.on(VALIDATE_FIELD_EVENT, _formElementSelector, _validateFieldHandler);
 
 			// Changing one field would trigger entire form validation for active/inactive toggle
