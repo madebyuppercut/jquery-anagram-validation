@@ -1,5 +1,5 @@
 /**
- * Anagram Validation jQuery Plugin v0.2
+ * Anagram Validation jQuery Plugin v0.3
  *
  * The purpose of this plugin is enable client-side validation (it's up to the application to determine its CSS) as weel as server-side error message rendering.
  * For usage, please refer to the Jasmine test suite and fixture.
@@ -10,6 +10,7 @@
  * Date: 2014-02-11T23:22:46Z
  */
 (function($) {
+	'use strict';
 	$.fn.anagramValidation = function(options) {
 		/************************************************************************************
 		 * Plugin defaults and globals
@@ -22,8 +23,8 @@
 				'emailList': {'pattern': '^(([a-zA-Z0-9_\\-\\.\\+]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5}){1,25})+(([,.;]\\s*){1}(([a-zA-Z0-9_\\-\\.\\+]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5}){1,25})+)*$', 'message': 'Email list is not valid'},
 				'text': {'pattern': '^[\\w\\W\\s\\d\\D]*$', 'message': 'Invalid text'},
 				'phone': {'pattern': '^(\\d{3}|\\(\\d{3}\\))[-\\.\\s]?\\d{3}[-\\.\\s]?\\d{4}(\\s?(x|ext|ext\\.){1}\\s?\\d+)?$', 'message': 'Phone number is not valid'},
-				'evenNumber': {'pattern': '^\d*[02468]{1}$', 'message': 'Even number only'},
-				'oddNumber': {'pattern': '^\d*[13579]{1}$', 'message': 'Odd number only'}
+				'evenNumber': {'pattern': '^\\d*[02468]{1}$', 'message': 'Even number only'},
+				'oddNumber': {'pattern': '^\\d*[13579]{1}$', 'message': 'Odd number only'}
 			},
 			DEFAULTS = {
 				'error-field-class': 'has-error',
@@ -146,10 +147,12 @@
 			 * Renders submit button(s) to inactive if there are errors present
 			 */
 			function _resolveSubmitActiveState() {
+				var $submit = $('[type="submit"]:not([data-ignore-submit])', event.target);
+
 				if ($('[data-valid="false"]', $context).length > 0 ) {
-					$('[type="submit"]', $context).addClass(_settings[INACTIVE_CLASS]);
+					$submit.addClass(_settings[INACTIVE_CLASS]);
 				} else {
-					$('[type="submit"]', $context).removeClass(_settings[INACTIVE_CLASS]);
+					$submit.removeClass(_settings[INACTIVE_CLASS]);
 				}
 			}
 
@@ -168,10 +171,13 @@
 					match = null,
 					messages = [],
 					required = null,
+					max = null,
+					min = null,
 					length = null,
-					repeat = null
-					flags = flags || {'silence': false};
-
+					repeat = null,
+					validity = null;
+					
+				flags = flags || {'silence': false};
 				$context.trigger(VALIDATE_BEFORE_EVENT, [$field]);
 
 				switch ($field[0].nodeName.toLowerCase()) {
@@ -216,7 +222,7 @@
 
 						// Only match requires extra lookup for pattern specific error messages
 						if (key === MATCH) {
-							var matchPattern = _settings[PATTERNS][match] || _settings[PATTERNS]['text'],		// Fall back on plain text
+							var matchPattern = _settings[PATTERNS][match] || _settings[PATTERNS]['text'];		// Fall back on plain text
 							tempMessage = $field.data(messageKey) || matchPattern.message;
 						} else {
 							tempMessage = $field.data(messageKey) || _settings[messageKey];
@@ -266,7 +272,9 @@
 			 * @param {event} event The jQuery event object.
 			 */
 			function _submitHandler(event) {
-				if ($('[type="submit"]', event.target).hasClass(_settings[INACTIVE_CLASS])) {
+				var $submit = $('[type="submit"]:not([data-ignore-submit])', event.target);
+
+				if ($submit.hasClass(_settings[INACTIVE_CLASS])) {
 					event.preventDefault();
 					return false;
 				} else {
@@ -310,7 +318,7 @@
 			 */
 			this.loadErrors = function(errors) {
 				$context.trigger(ERRORS_LOAD_EVENT, [errors]);
-			}
+			};
 
 			/***********************************************************************************/
 
