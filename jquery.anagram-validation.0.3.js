@@ -146,7 +146,7 @@
       /**
        * Renders submit button(s) to inactive if there are errors present
        */
-      function _resolveSubmitActiveState() {
+      function _resolveSubmitActiveState(event) {
         var $submit = $('[type="submit"]:not([data-ignore-submit])', event.target);
 
         if ($('[data-valid="false"]', $context).length > 0 ) {
@@ -247,7 +247,7 @@
         } else {
           $field.removeClass(_settings[ERROR_FIELD_CLASS]).attr('data-valid', 'true');
         }
-        _resolveSubmitActiveState();
+        _resolveSubmitActiveState(event);
 
         $context.trigger(VALIDATE_COMPLETE_EVENT, [$field, validity]);
       }
@@ -263,7 +263,7 @@
           $(this).trigger(VALIDATE_FIELD_EVENT, [flags]);
         });
 
-        _resolveSubmitActiveState();
+        _resolveSubmitActiveState(event);
         $context.trigger(VALIDATE_ALL_COMPLETE_EVENT);
       }
 
@@ -304,7 +304,7 @@
           }
         }
 
-        _resolveSubmitActiveState();
+        _resolveSubmitActiveState(event);
         $context.trigger(ERRORS_LOAD_COMPLETE_EVENT);
       }
 
