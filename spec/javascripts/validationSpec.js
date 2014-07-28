@@ -18,9 +18,18 @@ describe("A form", function() {
 		expect(typeof valObj).toBe("object");
 	});
 
-	it("should validate and submit button should be inactive", function() {
+	it("should validate on submit and submit button should be inactive", function() {
 		$fixtureForm.anagramValidation(testOptions).data('anagram-validation-object');
 		$fixtureForm.submit();
+
+		// Should have 14 offending fields total
+		expect($('[data-valid="false"]', $fixtureForm).length).toBe(15);
+		expect($('button[type="submit"]', $fixtureForm).hasClass('inactive')).toBe(true);
+	});
+
+	it("should validate on validateAll and submit button should be inactive", function() {
+		valObj = $fixtureForm.anagramValidation(testOptions).data('anagram-validation-object');
+		valObj.validateAll();
 
 		// Should have 14 offending fields total
 		expect($('[data-valid="false"]', $fixtureForm).length).toBe(15);

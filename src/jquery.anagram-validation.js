@@ -1,5 +1,5 @@
 /**
- * Anagram Validation jQuery Plugin v0.3
+ * Anagram Validation jQuery Plugin v0.4
  *
  * The purpose of this plugin is enable client-side validation (it's up to the application to determine its CSS) as weel as server-side error message rendering.
  * For usage, please refer to the Jasmine test suite and fixture.
@@ -318,6 +318,14 @@
 			 */
 			this.loadErrors = function(errors) {
 				$context.trigger(ERRORS_LOAD_EVENT, [errors]);
+			};
+
+			/**
+			 * Method to load server side error messages
+			 * @param {object} errors JavaScript object that holds the error messages.
+			 */
+			this.validateAll = function(errors) {
+				$context.trigger(VALIDATE_ALL_EVENT);
 			};
 
 			/***********************************************************************************/
